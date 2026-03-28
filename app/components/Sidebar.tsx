@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { signOut } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 
 const NAV_ITEMS = [
   {
@@ -163,18 +165,34 @@ export default function Sidebar() {
         </nav>
 
         {/* Bottom section */}
-        <div className="px-3 pb-4">
+        <div className="px-3 pb-4 flex flex-col gap-2">
+          <button
+            onClick={() => signOut(auth)}
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors w-full ${
+              collapsed ? "justify-center" : ""
+            }`}
+            style={{ color: "var(--danger)", background: "rgba(239, 68, 68, 0.05)", border: "1px solid rgba(239, 68, 68, 0.1)" }}
+            title={collapsed ? "Log out" : ""}
+          >
+            <span className="flex-shrink-0">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+              </svg>
+            </span>
+            {!collapsed && <span>Sign Out</span>}
+          </button>
+
           <div
-            className={`rounded-xl p-3 ${collapsed ? "text-center" : ""}`}
+            className={`rounded-xl p-3 ${collapsed ? "text-center hidden" : ""}`}
             style={{ background: "var(--bg-card)", border: "1px solid var(--border-subtle)" }}
           >
-            {!collapsed ? (
+            {!collapsed && (
               <>
                 <p className="text-xs font-semibold" style={{ color: "var(--text-primary)" }}>Hmar Duniya</p>
                 <p className="text-[10px] mt-0.5" style={{ color: "var(--text-muted)" }}>News Management v1.0</p>
               </>
-            ) : (
-              <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>v1</span>
             )}
           </div>
         </div>
